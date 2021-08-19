@@ -25,6 +25,8 @@ Flags:`)
 		flag.PrintDefaults()
 	}
 
+	// TODO: Add flag to write merged content to file
+
 	includeInputs := flag.Bool("s", false, "Emit comment with paths of input files")
 
 	flag.Parse()
