@@ -10,7 +10,8 @@
 
 Prometheus' [node exporter][node_exporter_doc] has a `textfile` collector
 reading textformat files in a predetermined directory. When multiple files
-contain the same metrics, albeit with different labels, collection fails.
+contain the same metrics, albeit with different labels, collection fails
+(see also [prometheus/node\_exporter#1885][node_exporter_issue1885]).
 
 There are also use cases where combining multiple metrics sources is useful,
 e.g. after downloading them from a collector using [cURL][curl].
@@ -74,6 +75,7 @@ With the source being available it's also possible to produce custom builds
 directly using [Go][golang] or [GoReleaser][goreleaser].
 
 [node_exporter_doc]: https://prometheus.io/docs/guides/node-exporter/
+[node_exporter_issue1885]: https://github.com/prometheus/node_exporter/issues/1885
 [prom_textformat]: https://prometheus.io/docs/instrumenting/exposition_formats/
 [curl]: https://curl.se/
 [releases]: https://github.com/hansmi/prometheus-textformat-merge/releases/latest
