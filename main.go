@@ -38,7 +38,7 @@ Flags:`)
 		flag.PrintDefaults()
 	}
 
-	includeInputs := flag.Bool("s", false, "Emit comment with paths of input files")
+	includeInputs := flag.Bool("show-inputs", false, "Emit comment with paths of input files")
 	outputFile := flag.String("output", "", "Write merged metrics to given file instead of standard output")
 
 	flag.Parse()
