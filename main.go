@@ -4,9 +4,22 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
+
+var stdoutWriter io.Writer = os.Stdout
+
+type writeFunc func(io.Writer) error
+
+func withOutput(path string, fn writeFunc) error {
+	if path == "" {
+		return fn(stdoutWriter)
+	}
+
+	return withFileOutput(path, fn)
+}
 
 func main() {
 	flag.Usage = func() {
@@ -25,9 +38,8 @@ Flags:`)
 		flag.PrintDefaults()
 	}
 
-	// TODO: Add flag to write merged content to file
-
 	includeInputs := flag.Bool("s", false, "Emit comment with paths of input files")
+	outputFile := flag.String("output", "", "Write merged metrics to given file instead of standard output")
 
 	flag.Parse()
 
@@ -44,7 +56,9 @@ Flags:`)
 		log.Fatal(err)
 	}
 
-	if err := merged.write(os.Stdout, *includeInputs); err != nil {
+	if err := withOutput(*outputFile, func(w io.Writer) error {
+		return merged.write(w, *includeInputs)
+	}); err != nil {
 		log.Fatalf("Writing output failed: %v", err)
 	}
 }

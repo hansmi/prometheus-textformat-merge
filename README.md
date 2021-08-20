@@ -44,11 +44,13 @@ node_load5 0.42
 Reading from standard input is also supported with the `-` placeholder:
 
 ```bash
-$ prometheus-textformat-merge first.prom - <<'EOF'
+$ prometheus-textformat-merge --output all.prom first.prom - <<'EOF'
 # TYPE node_disk_io_time_seconds_total counter
 node_disk_io_time_seconds_total{device="dm-4"} 104.156
 node_disk_io_time_seconds_total{device="dm-5"} 0.372
 EOF
+
+$ cat all.prom
 # HELP node_disk_io_time_seconds_total Total seconds spent doing I/Os.
 # TYPE node_disk_io_time_seconds_total counter
 node_disk_io_time_seconds_total{device="dm-0"} 581.412
@@ -57,8 +59,8 @@ node_disk_io_time_seconds_total{device="dm-4"} 104.156
 node_disk_io_time_seconds_total{device="dm-5"} 0.372
 ```
 
-Note how the same metric was combined from multiple sources. See the `--help`
-output for available flags.
+Note how the same metric was combined from multiple sources and written to
+a file. See the `--help` output for available flags.
 
 ## Installation
 
