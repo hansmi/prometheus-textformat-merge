@@ -5,10 +5,12 @@
 [![CI workflow](https://github.com/hansmi/prometheus-textformat-merge/actions/workflows/ci.yaml/badge.svg)](https://github.com/hansmi/prometheus-textformat-merge/actions/workflows/ci.yaml)
 [![Go reference](https://pkg.go.dev/badge/github.com/hansmi/prometheus-textformat-merge.svg)](https://pkg.go.dev/github.com/hansmi/prometheus-textformat-merge)
 
+`prometheus-textformat-merge` is a command line program to combine multiple
+[Prometheus `textformat`][prom_textformat] inputs.
+
 Prometheus' [node exporter][node_exporter_doc] has a `textfile` collector
-reading [textformat][prom_textformat] files in a predetermined directory. When
-multiple files contain the same metrics, albeit with different labels,
-collection fails.
+reading textformat files in a predetermined directory. When multiple files
+contain the same metrics, albeit with different labels, collection fails.
 
 There are also use cases where combining multiple metrics sources is useful,
 e.g. after downloading them from a collector using [cURL][curl].
