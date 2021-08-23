@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"runtime"
 
 	dto "github.com/prometheus/client_model/go"
@@ -98,6 +100,36 @@ func inputWrappersFromPaths(paths []string) []inputWrapper {
 	}
 
 	return result
+}
+
+func inputWrappersFromDirs(paths []string, pattern string) ([]inputWrapper, error) {
+	var result []inputWrapper
+
+	for _, path := range paths {
+		entries, err := ioutil.ReadDir(path)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, i := range entries {
+			if !i.Mode().IsRegular() {
+				continue
+			}
+
+			matched, err := filepath.Match(pattern, i.Name())
+			if err != nil {
+				return nil, err
+			}
+
+			if matched {
+				result = append(result, &fileInputWrapper{
+					path: filepath.Join(path, i.Name()),
+				})
+			}
+		}
+	}
+
+	return result, nil
 }
 
 func readMetricFamilies(w inputWrapper) (parsedInput, error) {

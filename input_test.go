@@ -139,6 +139,59 @@ func TestInputWrappersFromPaths(t *testing.T) {
 	}
 }
 
+func TestInputWrappersFromDirs(t *testing.T) {
+	tmpdir := t.TempDir()
+
+	fileA := filepath.Join(tmpdir, "a.txt")
+	fileB := filepath.Join(tmpdir, "b.txt")
+	hiddenA := filepath.Join(tmpdir, ".hidden.txt")
+
+	for _, path := range []string{fileA, fileB, hiddenA} {
+		if err := ioutil.WriteFile(path, nil, 0o644); err != nil {
+			t.Error(err)
+		}
+	}
+
+	for _, tc := range []struct {
+		name    string
+		pattern string
+		paths   []string
+		want    []string
+	}{
+		{name: "empty"},
+		{
+			name:    "no matching",
+			pattern: "*.txt",
+			paths:   []string{t.TempDir(), t.TempDir(), t.TempDir()},
+		},
+		{
+			name:    "",
+			pattern: "[^.]*.txt",
+			paths:   []string{tmpdir, t.TempDir()},
+			want:    []string{fileA, fileB},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var got []string
+
+			inputs, err := inputWrappersFromDirs(tc.paths, tc.pattern)
+			if err != nil {
+				t.Errorf("inputWrappersFromDirs() failed: %v", err)
+			}
+
+			for _, i := range inputs {
+				got = append(got, i.Name())
+			}
+
+			if diff := cmp.Diff(got, tc.want, cmpopts.SortSlices(func(a, b string) bool {
+				return a < b
+			})); diff != "" {
+				t.Errorf("discovered file difference (-got +want):\n%s", diff)
+			}
+		})
+	}
+}
+
 func TestReadMetricFamilies(t *testing.T) {
 	for _, tc := range []struct {
 		name    string

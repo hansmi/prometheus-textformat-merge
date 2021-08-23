@@ -13,8 +13,15 @@ reading textformat files in a predetermined directory. When multiple files
 contain the same metrics, albeit with different labels, collection fails
 (see also [prometheus/node\_exporter#1885][node_exporter_issue1885]).
 
-There are also use cases where combining multiple metrics sources is useful,
+There are other use cases where combining multiple metrics sources is useful,
 e.g. after downloading them from a collector using [cURL][curl].
+
+The following inputs are supported:
+
+* Regular files using the Prometheus text format
+* Standard input
+* Directories with multiple files with the `--dirs` flag (enumerates `*.prom`
+  in the given directories by default)
 
 ## Example usage
 
