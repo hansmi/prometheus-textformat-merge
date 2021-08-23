@@ -21,6 +21,28 @@ func withOutput(path string, fn writeFunc) error {
 	return withFileOutput(path, fn)
 }
 
+type cliFlags struct {
+	showInputs bool
+	outputFile string
+}
+
+func (f *cliFlags) register(fs *flag.FlagSet) {
+	fs.BoolVar(&f.showInputs, "show-inputs", false, "Emit comment with paths of input files")
+	fs.StringVar(&f.outputFile, "output", "", "Write merged metrics to given file instead of standard output")
+}
+
+func (f *cliFlags) inputs(fs *flag.FlagSet) ([]inputWrapper, error) {
+	var paths []string
+
+	if fs.NArg() == 0 {
+		paths = []string{stdinPlaceholder}
+	} else {
+		paths = fs.Args()
+	}
+
+	return inputWrappersFromPaths(paths), nil
+}
+
 func main() {
 	flag.Usage = func() {
 		w := flag.CommandLine.Output()
@@ -38,26 +60,24 @@ Flags:`)
 		flag.PrintDefaults()
 	}
 
-	includeInputs := flag.Bool("show-inputs", false, "Emit comment with paths of input files")
-	outputFile := flag.String("output", "", "Write merged metrics to given file instead of standard output")
+	var cf cliFlags
+
+	cf.register(flag.CommandLine)
 
 	flag.Parse()
 
-	var paths []string
-
-	if flag.NArg() == 0 {
-		paths = []string{stdinPlaceholder}
-	} else {
-		paths = flag.Args()
-	}
-
-	merged, err := readAndMerge(context.Background(), inputWrappersFromPaths(paths))
+	inputs, err := cf.inputs(flag.CommandLine)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := withOutput(*outputFile, func(w io.Writer) error {
-		return merged.write(w, *includeInputs)
+	merged, err := readAndMerge(context.Background(), inputs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := withOutput(cf.outputFile, func(w io.Writer) error {
+		return merged.write(w, cf.showInputs)
 	}); err != nil {
 		log.Fatalf("Writing output failed: %v", err)
 	}
