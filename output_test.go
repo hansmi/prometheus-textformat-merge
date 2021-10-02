@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -88,6 +89,41 @@ func TestWithOutput(t *testing.T) {
 
 			if diff := cmp.Diff(stdout.String(), tc.wantStdout); diff != "" {
 				t.Errorf("stdout difference (-got +want):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestWithFileOutputPreserveMode(t *testing.T) {
+	for _, mode := range []os.FileMode{
+		0o644,
+		0o600,
+		0o755,
+	} {
+		t.Run(fmt.Sprintf("%04o", mode), func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "test.txt")
+
+			if fh, err := os.Create(path); err != nil {
+				t.Fatalf("Create(%q) failed: %v", path, err)
+			} else {
+				if err := fh.Chmod(mode); err != nil {
+					t.Errorf("Chmod() failed: %v", err)
+				}
+
+				fh.Close()
+			}
+
+			if err := withFileOutput(path, func(w io.Writer) error {
+				io.WriteString(w, "content\n")
+				return nil
+			}); err != nil {
+				t.Errorf("withFileOutput() failed: %v", err)
+			}
+
+			if fi, err := os.Lstat(path); err != nil {
+				t.Errorf("Lstat(%q) failed: %v", path, err)
+			} else if got := fi.Mode() & os.ModePerm; got != mode {
+				t.Errorf("Got file mode %04o, want %04o", got, mode)
 			}
 		})
 	}
