@@ -22,6 +22,7 @@ func withOutput(path string, fn writeFunc) error {
 }
 
 type cliFlags struct {
+	showVersion     bool
 	showInputs      bool
 	outputFile      string
 	dirs            bool
@@ -29,6 +30,7 @@ type cliFlags struct {
 }
 
 func (f *cliFlags) register(fs *flag.FlagSet) {
+	fs.BoolVar(&f.showVersion, "version", false, "Output version information and exit")
 	fs.BoolVar(&f.showInputs, "show-inputs", false, "Emit comment with paths of input files")
 	fs.StringVar(&f.outputFile, "output", "", "Write merged metrics to given file instead of standard output")
 	fs.BoolVar(&f.dirs, "dirs", false, "Read metrics from regular files in directories given as command arguments")
@@ -73,6 +75,11 @@ Flags:`)
 	cf.register(flag.CommandLine)
 
 	flag.Parse()
+
+	if cf.showVersion {
+		showVersion(os.Stdout)
+		return
+	}
 
 	inputs, err := cf.inputs(flag.CommandLine)
 	if err != nil {
