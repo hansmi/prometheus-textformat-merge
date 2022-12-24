@@ -77,6 +77,7 @@ Pre-built binaries are provided for all [releases][releases]:
 * Binary archives (`.tar.gz`)
 * Debian/Ubuntu (`.deb`)
 * RHEL/Fedora (`.rpm`)
+* Microsoft Windows (`*.zip`)
 
 With the source being available it's also possible to produce custom builds
 directly using [Go][golang] or [GoReleaser][goreleaser].
