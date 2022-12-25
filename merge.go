@@ -123,7 +123,7 @@ func mergeInputs(ctx context.Context, inputsCh <-chan parsedInput) (*mergedInput
 func readAndMerge(ctx context.Context, inputs []inputWrapper) (*mergedInputs, error) {
 	g, ctx := errgroup.WithContext(ctx)
 
-	parsedCh := make(chan parsedInput, 0)
+	parsedCh := make(chan parsedInput)
 
 	g.Go(func() error {
 		defer close(parsedCh)
