@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -122,6 +123,9 @@ func TestWithFileOutputPreserveMode(t *testing.T) {
 
 			if fi, err := os.Lstat(path); err != nil {
 				t.Errorf("Lstat(%q) failed: %v", path, err)
+			} else if runtime.GOOS == "windows" {
+				// As of Go 1.19 only the 0200 bit (owner writable) is used
+				// (https://pkg.go.dev/os#Chmod).
 			} else if got := fi.Mode() & os.ModePerm; got != mode {
 				t.Errorf("Got file mode %04o, want %04o", got, mode)
 			}
