@@ -2,7 +2,7 @@ package main
 
 import (
 	"io"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -28,7 +28,7 @@ func withReplacedStdinReader(t *testing.T, content string) {
 		stdinReader = origStdinReader
 	})
 
-	stdinReader = ioutil.NopCloser(strings.NewReader(content))
+	stdinReader = io.NopCloser(strings.NewReader(content))
 }
 
 type fakeReaderWithName struct {
@@ -63,7 +63,7 @@ func TestMakeReaderInputWrapper(t *testing.T) {
 		},
 		{
 			name: "in-memory",
-			r:    ioutil.NopCloser(strings.NewReader("content")),
+			r:    io.NopCloser(strings.NewReader("content")),
 		},
 		{
 			name:     "file",
@@ -90,7 +90,7 @@ func TestInputWrappersFromPaths(t *testing.T) {
 	fileB := filepath.Join(tmpdir, "b.txt")
 
 	for _, path := range []string{fileA, fileB} {
-		if err := ioutil.WriteFile(path, []byte(filepath.Base(path)), 0o644); err != nil {
+		if err := os.WriteFile(path, []byte(filepath.Base(path)), 0o644); err != nil {
 			t.Error(err)
 		}
 	}
@@ -119,7 +119,7 @@ func TestInputWrappersFromPaths(t *testing.T) {
 
 			for _, i := range inputWrappersFromPaths(tc.paths) {
 				if err := i.Process(func(r io.Reader) error {
-					content, err := ioutil.ReadAll(r)
+					content, err := io.ReadAll(r)
 					if err != nil {
 						return err
 					}
@@ -147,7 +147,7 @@ func TestInputWrappersFromDirs(t *testing.T) {
 	hiddenA := filepath.Join(tmpdir, ".hidden.txt")
 
 	for _, path := range []string{fileA, fileB, hiddenA} {
-		if err := ioutil.WriteFile(path, nil, 0o644); err != nil {
+		if err := os.WriteFile(path, nil, 0o644); err != nil {
 			t.Error(err)
 		}
 	}

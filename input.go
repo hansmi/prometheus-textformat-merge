@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -106,13 +105,13 @@ func inputWrappersFromDirs(paths []string, pattern string) ([]inputWrapper, erro
 	var result []inputWrapper
 
 	for _, path := range paths {
-		entries, err := ioutil.ReadDir(path)
+		entries, err := os.ReadDir(path)
 		if err != nil {
 			return nil, err
 		}
 
 		for _, i := range entries {
-			if !i.Mode().IsRegular() {
+			if !i.Type().IsRegular() {
 				continue
 			}
 

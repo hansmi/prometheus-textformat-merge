@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -78,7 +77,7 @@ func TestWithOutput(t *testing.T) {
 			}
 
 			if err == nil && tc.path != "" {
-				got, err := ioutil.ReadFile(tc.path)
+				got, err := os.ReadFile(tc.path)
 				if err != nil {
 					t.Errorf("ReadFile() failed: %v", err)
 				}
