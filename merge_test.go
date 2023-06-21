@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"google.golang.org/protobuf/testing/protocmp"
 
 	dto "github.com/prometheus/client_model/go"
 )
@@ -92,7 +93,7 @@ func TestMergeFamily(t *testing.T) {
 			}
 
 			if err == nil {
-				if diff := cmp.Diff(got, tc.want, cmpopts.EquateEmpty()); diff != "" {
+				if diff := cmp.Diff(got, tc.want, protocmp.Transform(), cmpopts.EquateEmpty()); diff != "" {
 					t.Errorf("mergeFamily() difference (-got +want):\n%s", diff)
 				}
 			}
@@ -291,7 +292,7 @@ func TestReadAndMerge(t *testing.T) {
 			}
 
 			if err == nil {
-				if diff := cmp.Diff(got, tc.want, cmp.AllowUnexported(mergedInputs{}), cmpopts.EquateEmpty(), cmpopts.EquateApprox(0, 0.0001)); diff != "" {
+				if diff := cmp.Diff(got, tc.want, protocmp.Transform(), cmp.AllowUnexported(mergedInputs{}), cmpopts.EquateEmpty(), cmpopts.EquateApprox(0, 0.0001)); diff != "" {
 					t.Errorf("readAndMerge() difference (-got +want):\n%s", diff)
 				}
 			}
