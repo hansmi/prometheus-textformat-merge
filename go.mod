@@ -10,7 +10,7 @@ toolchain go1.21.7
 exclude github.com/gogo/protobuf v1.1.1
 
 require (
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/google/renameio/v2 v2.0.0
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.62.0
