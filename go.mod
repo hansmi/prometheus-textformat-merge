@@ -1,6 +1,8 @@
 module github.com/hansmi/prometheus-textformat-merge
 
-go 1.21
+go 1.22
+
+toolchain go1.22.12
 
 // Exclude dependency on vulnerable github.com/gogo/protobuf version.
 //
@@ -13,7 +15,7 @@ require (
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.63.0
 	golang.org/x/sync v0.11.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.6
 )
 
 require github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
