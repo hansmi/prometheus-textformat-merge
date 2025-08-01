@@ -14,7 +14,7 @@ require (
 	github.com/google/renameio/v2 v2.0.0
 	github.com/prometheus/client_model v0.6.2
 	github.com/prometheus/common v0.65.0
-	golang.org/x/sync v0.15.0
+	golang.org/x/sync v0.16.0
 	google.golang.org/protobuf v1.36.6
 )
 
