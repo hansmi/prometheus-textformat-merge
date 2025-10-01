@@ -10,6 +10,7 @@ import (
 
 	dto "github.com/prometheus/client_model/go"
 	"github.com/prometheus/common/expfmt"
+	"github.com/prometheus/common/model"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -136,7 +137,7 @@ func readMetricFamilies(w inputWrapper) (parsedInput, error) {
 
 	if err := w.Process(func(r io.Reader) error {
 		var err error
-		var parser expfmt.TextParser
+		parser := expfmt.NewTextParser(model.UTF8Validation)
 		families, err = parser.TextToMetricFamilies(r)
 		return err
 	}); err != nil {
