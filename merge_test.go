@@ -179,6 +179,7 @@ requests{kind="get"} 18193
 		})
 	}
 }
+
 func TestReadAndMerge(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
