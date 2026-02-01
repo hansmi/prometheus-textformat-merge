@@ -1,8 +1,6 @@
 module github.com/hansmi/prometheus-textformat-merge
 
-go 1.24.0
-
-toolchain go1.24.1
+go 1.25
 
 // Exclude dependency on vulnerable github.com/gogo/protobuf version.
 //
@@ -11,7 +9,7 @@ exclude github.com/gogo/protobuf v1.1.1
 
 require (
 	github.com/google/go-cmp v0.7.0
-	github.com/google/renameio/v2 v2.0.1
+	github.com/google/renameio/v2 v2.0.2
 	github.com/prometheus/client_model v0.6.2
 	github.com/prometheus/common v0.67.4
 	golang.org/x/sync v0.19.0
