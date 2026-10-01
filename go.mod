@@ -10,7 +10,7 @@ exclude github.com/gogo/protobuf v1.1.1
 require (
 	github.com/google/go-cmp v0.7.0
 	github.com/google/renameio/v2 v2.0.2
-	github.com/prometheus/client_model v0.6.2
+	github.com/prometheus/client_model v0.6.3
 	github.com/prometheus/common v0.70.1
 	golang.org/x/sync v0.23.0
 	google.golang.org/protobuf v1.36.12
