@@ -12,7 +12,7 @@ require (
 	github.com/google/renameio/v2 v2.0.2
 	github.com/prometheus/client_model v0.6.3
 	github.com/prometheus/common v0.72.0
-	golang.org/x/sync v0.23.0
+	golang.org/x/sync v0.24.0
 	google.golang.org/protobuf v1.36.12
 )
 
